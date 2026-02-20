@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://86yl8e74ekus"]
+
+[ext_resource type="Script" uid="uid://5ceyd7pwx10g" path="res://scenes/weapons/punch.gd" id="1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 5.0
+
+[node name="Punch" type="Area2D"]
+script = ExtResource("1")
+damage = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")

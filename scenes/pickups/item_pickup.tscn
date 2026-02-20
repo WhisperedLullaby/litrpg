@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/pickups/item_pickup.gd" id="1"]
+[ext_resource type="Shader" path="res://shaders/interactable_glow.gdshader" id="2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]
+shader = ExtResource("2")
+shader_parameter/glow_color = Color(1, 1, 0.8, 0.5)
+shader_parameter/glow_width = 1.5
+shader_parameter/pulse_speed = 0.8
+shader_parameter/pulse_min = 0.15
+shader_parameter/pulse_max = 0.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 10.0
+
+[node name="ItemPickup" type="Area2D"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_1")
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
