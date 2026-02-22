@@ -9,9 +9,9 @@ extends Resource
 @export var min_count: int = 1
 @export var max_count: int = 1
 
-static func create(scene: PackedScene, chance: float, min_c: int = 1, max_c: int = 1) -> LootDrop:
+static func create(p_scene: PackedScene, chance: float, min_c: int = 1, max_c: int = 1) -> LootDrop:
 	var drop := LootDrop.new()
-	drop.scene = scene
+	drop.scene = p_scene
 	drop.drop_chance = chance
 	drop.min_count = min_c
 	drop.max_count = max_c

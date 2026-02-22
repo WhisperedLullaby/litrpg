@@ -25,7 +25,7 @@ const ITEM_SELECTED_SCALE := Vector2(0.7, 0.7)
 var _inventory: InventoryComponent = null
 var _orbit_nodes: Array[Node2D] = []
 var _trail_nodes: Array[Node2D] = []
-var _trail_targets: Array[Vector2] = []
+
 var _glow_shader: Shader = preload("res://shaders/interactable_glow.gdshader")
 var _time: float = 0.0
 var _last_direction: Vector2 = Vector2.DOWN

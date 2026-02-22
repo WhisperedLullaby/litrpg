@@ -302,11 +302,11 @@ func _update_display_cell(display_coord: Vector2i) -> void:
 	# The display grid is offset by -0.5 tiles, so display cell (x,y)
 	# corresponds to world cells: TL=(x-1,y-1), TR=(x,y-1), BL=(x-1,y), BR=(x,y)
 	var tl := _is_grass(display_coord + Vector2i(-1, -1))
-	var tr := _is_grass(display_coord + Vector2i(0, -1))
+	var t_r := _is_grass(display_coord + Vector2i(0, -1))
 	var bl := _is_grass(display_coord + Vector2i(-1, 0))
 	var br := _is_grass(display_coord + Vector2i(0, 0))
 
-	var bitmask := tl * 1 + tr * 2 + bl * 4 + br * 8
+	var bitmask := tl * 1 + t_r * 2 + bl * 4 + br * 8
 	var atlas_coord: Vector2i = DUAL_GRID_MAP[bitmask]
 
 	_display_layer.set_cell(display_coord, 0, atlas_coord)
@@ -470,6 +470,15 @@ func _create_water_collision(chunk_coord: Vector2i, rects: Array[Rect2]) -> void
 		shape.shape = rect_shape
 		shape.position = rect.position + rect.size / 2.0
 		body.add_child(shape)
+
+		# Water visual — blue tinted overlay so water doesn't look like dirt.
+		var visual := ColorRect.new()
+		visual.color = Color(0.18, 0.32, 0.50, 0.75)
+		visual.size = Vector2(TILE_SIZE, TILE_SIZE)
+		visual.position = rect.position
+		visual.z_index = -9  # Above ground tiles (-10), below everything else.
+		body.add_child(visual)
+
 		add_child(body)
 		bodies.append(body)
 

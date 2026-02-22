@@ -53,19 +53,19 @@ func take_hit(damage: float, hit_from: Vector2 = Vector2.ZERO) -> void:
 
 func _spawn_blood() -> void:
 	var particles := GPUParticles2D.new()
-	var material := ParticleProcessMaterial.new()
+	var mat := ParticleProcessMaterial.new()
 
 	# Blood red, tiny droplets spraying outward.
-	material.direction = Vector3(0, -1, 0)
-	material.spread = 45.0
-	material.initial_velocity_min = 20.0
-	material.initial_velocity_max = 50.0
-	material.gravity = Vector3(0, 60, 0)
-	material.scale_min = 1.0
-	material.scale_max = 2.0
-	material.color = Color(0.7, 0.05, 0.05, 0.9)
+	mat.direction = Vector3(0, -1, 0)
+	mat.spread = 45.0
+	mat.initial_velocity_min = 20.0
+	mat.initial_velocity_max = 50.0
+	mat.gravity = Vector3(0, 60, 0)
+	mat.scale_min = 1.0
+	mat.scale_max = 2.0
+	mat.color = Color(0.7, 0.05, 0.05, 0.9)
 
-	particles.process_material = material
+	particles.process_material = mat
 	particles.amount = 8
 	particles.lifetime = 0.3
 	particles.one_shot = true
