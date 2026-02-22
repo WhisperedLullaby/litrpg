@@ -38,11 +38,11 @@ func collect(collector: Node) -> void:
 		if not inventory.add_item(item_data, 1):
 			# Inventory full - bounce away.
 			var away: Vector2 = (global_position - collector.global_position).normalized()
-			var tween := create_tween()
-			tween.tween_property(self, "global_position", global_position + away * 20.0, 0.2)
+			var bounce := create_tween()
+			bounce.tween_property(self, "global_position", global_position + away * 20.0, 0.2)
 			return
 
 	# Collected - shrink and remove.
-	var tween := create_tween()
-	tween.tween_property(self, "scale", Vector2.ZERO, 0.15).set_ease(Tween.EASE_IN)
-	tween.tween_callback(queue_free)
+	var shrink := create_tween()
+	shrink.tween_property(self, "scale", Vector2.ZERO, 0.15).set_ease(Tween.EASE_IN)
+	shrink.tween_callback(queue_free)

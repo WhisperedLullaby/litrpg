@@ -160,7 +160,7 @@ func _setup_animations() -> void:
 		frames.set_animation_loop(anim_name, looping)
 
 		var sheet_texture: Texture2D = load(sheet_path)
-		var frame_width: int = sheet_texture.get_width() / frame_count
+		var frame_width := sheet_texture.get_width() / frame_count
 		var frame_height: int = sheet_texture.get_height()
 
 		for i in frame_count:

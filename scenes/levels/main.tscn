@@ -1,13 +1,13 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://dp7feyd1tx1x3"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1"]
-[ext_resource type="Script" path="res://scenes/levels/enemy_spawner.gd" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/bat.tscn" id="3"]
+[ext_resource type="Script" uid="uid://d0d0yc8dpilmx" path="res://scenes/levels/enemy_spawner.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://cno6hvxvhow5g" path="res://scenes/enemies/bat.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/health_bar.tscn" id="4"]
-[ext_resource type="Script" path="res://scenes/levels/main.gd" id="5"]
-[ext_resource type="Script" path="res://scenes/levels/world_generator.gd" id="6"]
-[ext_resource type="Script" path="res://scenes/ui/xp_bar.gd" id="8"]
-[ext_resource type="Script" path="res://scenes/levels/camera.gd" id="9"]
+[ext_resource type="Script" uid="uid://dw5mjkddooksg" path="res://scenes/levels/main.gd" id="5"]
+[ext_resource type="Script" uid="uid://054qu76d44ot" path="res://scenes/levels/world_generator.gd" id="6"]
+[ext_resource type="Script" uid="uid://cf5h4xmd60cel" path="res://scenes/ui/xp_bar.gd" id="8"]
+[ext_resource type="Script" uid="uid://b3fpvssx7s5p8" path="res://scenes/levels/camera.gd" id="9"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("5")

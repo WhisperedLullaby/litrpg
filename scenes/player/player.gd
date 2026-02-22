@@ -6,6 +6,7 @@ extends CharacterBody2D
 
 var facing_direction: String = "front"
 var speed: float = 80.0
+var speed_modifier: float = 1.0
 
 # Pre-built "wounded" effect - applied when below 50% HP.
 # 25% speed reduction. Duration 0 = permanent (managed manually).
@@ -44,9 +45,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(_delta: float) -> void:
 	var input_direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	velocity = input_direction.normalized() * speed + status_effects.get_knockback_velocity()
+	velocity = input_direction.normalized() * speed * speed_modifier + status_effects.get_knockback_velocity()
 	move_and_slide()
 	_update_animation(input_direction)
+	#print("speed=%.1f  agi=%.2f  kb=%s" % [speed, stats.get_stat("agility"), status_effects.get_knockback_velocity()])
 
 func _recalculate_from_stats() -> void:
 	# Speed is derived from AGI through the system's universal formula.
@@ -104,7 +106,7 @@ func _setup_animations() -> void:
 		frames.set_animation_loop(anim_name, true)
 
 		var sheet_texture: Texture2D = load(sheet_path)
-		var frame_width: int = sheet_texture.get_width() / frame_count
+		var frame_width := sheet_texture.get_width() / frame_count
 		var frame_height: int = sheet_texture.get_height()
 
 		for i in frame_count:

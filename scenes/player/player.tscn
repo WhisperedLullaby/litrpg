@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2"]
@@ -14,6 +14,8 @@
 [ext_resource type="Script" path="res://scripts/components/status_effect_component.gd" id="12"]
 [ext_resource type="Script" path="res://scripts/components/inventory_component.gd" id="13"]
 [ext_resource type="Script" path="res://scenes/player/inventory_visual.gd" id="14"]
+
+[ext_resource type="Script" path="res://scenes/player/dash_skill.gd" id="15"]
 
 [sub_resource type="Resource" id="player_base_stats"]
 script = ExtResource("10")
@@ -81,6 +83,9 @@ projectile_speed = 200.0
 [node name="PunchWeapon" type="Node2D" parent="."]
 script = ExtResource("7")
 punch_scene = ExtResource("8")
+
+[node name="DashSkill" type="Node" parent="."]
+script = ExtResource("15")
 
 [node name="InventoryComponent" type="Node" parent="."]
 script = ExtResource("13")

@@ -94,11 +94,11 @@ func _shadow_dash(user: Node2D) -> bool:
 
 	return true
 
-func _test_a(user: Node2D) -> bool:
+func _test_a(_user: Node2D) -> bool:
 	print("item used")
 	return true
 
-func _test_b(user: Node2D) -> bool:
+func _test_b(_user: Node2D) -> bool:
 	print("item super used")
 	return true
 

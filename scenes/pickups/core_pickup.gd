@@ -74,9 +74,9 @@ func collect(collector: Node) -> void:
 
 	SignalBus.core_collected.emit(energy_value)
 	# Quick shrink animation then remove.
-	var tween := create_tween()
-	tween.tween_property(self, "scale", Vector2.ZERO, 0.15).set_ease(Tween.EASE_IN)
-	tween.tween_callback(queue_free)
+	var shrink := create_tween()
+	shrink.tween_property(self, "scale", Vector2.ZERO, 0.15).set_ease(Tween.EASE_IN)
+	shrink.tween_callback(queue_free)
 
 func _find_inventory(entity: Node) -> InventoryComponent:
 	for child in entity.get_children():
