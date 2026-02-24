@@ -17,26 +17,8 @@ const UNLOAD_RADIUS := 4       # chunks freed beyond this distance
 const GRASS_THRESHOLD := -0.15  # above this = grass
 const WATER_THRESHOLD := -0.35  # below this in water noise = water
 
-# Decoration density (chance per grass tile to spawn a decoration).
-const TREE_CHANCE := 0.02
-const ROCK_CHANCE := 0.0  # Disabled until new rock sprites are drawn.
-const PLANT_CHANCE := 0.06
-const BUSH_CHANCE := 0.008  # 2x2 medium bush
-const JAR_CHANCE := 0.005   # breakable jars
-
-# Plant atlas coordinates (16x16 cells in Plants.png).
-const PLANT_CELL := 16
-const PLANT_COORDS: Array[Vector2i] = [
-	Vector2i(5, 1), Vector2i(6, 1), Vector2i(7, 1), Vector2i(8, 1),
-	Vector2i(5, 2), Vector2i(6, 2), Vector2i(7, 2), Vector2i(8, 2),
-	Vector2i(3, 2),  # tiny tree stump
-]
-const FLOWER_COORDS: Array[Vector2i] = [
-	Vector2i(14, 1), Vector2i(15, 1), Vector2i(16, 1), Vector2i(17, 1),
-	Vector2i(14, 2), Vector2i(15, 2), Vector2i(16, 2), Vector2i(17, 2),
-]
-# 2x2 bush: top-left at (3,3), spans to (4,4) → 32x32 region.
-const BUSH_ORIGIN := Vector2i(3, 3)
+# Default config is loaded automatically. Override in the inspector to swap configs.
+@export var decoration_config: WorldDecorationConfig = preload("res://resources/world_decorations.tres")
 
 # The 16-tile dual grid lookup: bitmask index → atlas coords.
 # Bitmask: TL=bit0, TR=bit1, BL=bit2, BR=bit3.
@@ -79,19 +61,11 @@ var _display_layer: TileMapLayer = null
 var _tile_set: TileSet = null
 var _water_bodies: Dictionary = {}  # chunk_coord → Array[StaticBody2D]
 
-# Decoration resources (preloaded).
-var _tree_textures: Array[Texture2D] = []
-var _rock_textures: Array[Texture2D] = []
-var _plant_textures: Array[Texture2D] = []
-var _flower_textures: Array[Texture2D] = []
-var _bush_texture: Texture2D = null
-var _jar_scene: PackedScene = preload("res://scenes/interactables/jar.tscn")
 
 func _ready() -> void:
 	_setup_noise()
 	_setup_tileset()
 	_setup_display_layer()
-	_preload_decorations()
 
 func _process(_delta: float) -> void:
 	if not player:
@@ -136,37 +110,6 @@ func _setup_display_layer() -> void:
 	_display_layer.position = Vector2(-TILE_SIZE / 2.0, -TILE_SIZE / 2.0)
 	_display_layer.z_index = -10  # Draw under everything.
 	add_child(_display_layer)
-
-func _preload_decorations() -> void:
-	# Hand-painted trees — two variants, chosen randomly per spawn.
-	_tree_textures = [
-		preload("res://resources/256textures/tree_1.png"),
-		preload("res://resources/256textures/tree_2.png"),
-	]
-
-	# Rocks - individual PNGs.
-	for i in range(1, 7):
-		var path := "res://sprites/newTiles/Rocks/ClassicalRocks/Rock%d.png" % i
-		if ResourceLoader.exists(path):
-			_rock_textures.append(load(path))
-
-	# Plants, flowers, and bush from Plants.png spritesheet.
-	var plants_png: Texture2D = preload("res://sprites/newTiles/Decorations/Plants.png")
-	for coord in PLANT_COORDS:
-		var tex := AtlasTexture.new()
-		tex.atlas = plants_png
-		tex.region = Rect2(coord.x * PLANT_CELL, coord.y * PLANT_CELL, PLANT_CELL, PLANT_CELL)
-		_plant_textures.append(tex)
-	for coord in FLOWER_COORDS:
-		var tex := AtlasTexture.new()
-		tex.atlas = plants_png
-		tex.region = Rect2(coord.x * PLANT_CELL, coord.y * PLANT_CELL, PLANT_CELL, PLANT_CELL)
-		_flower_textures.append(tex)
-	# 2x2 bush (32x32 region).
-	var bush_tex := AtlasTexture.new()
-	bush_tex.atlas = plants_png
-	bush_tex.region = Rect2(BUSH_ORIGIN.x * PLANT_CELL, BUSH_ORIGIN.y * PLANT_CELL, PLANT_CELL * 2, PLANT_CELL * 2)
-	_bush_texture = bush_tex
 
 # --- Chunk Management ---
 
@@ -307,141 +250,26 @@ func _is_grass(cell: Vector2i) -> int:
 # --- Decorations ---
 
 func _try_spawn_decoration(cell: Vector2i, chunk_data: Dictionary) -> void:
-	if not ysort_layer:
+	if not decoration_config or not ysort_layer:
 		return
+	for entry in decoration_config.entries:
+		if _decoration_rng.randf() < entry.chance:
+			var node := _spawn_decoration(cell, entry)
+			if node:
+				chunk_data["decorations"].append(node)
+			return  # One decoration per cell.
 
-	var roll := _decoration_rng.randf()
-	var threshold := 0.0
-
-	# Trees (animated, with collision).
-	threshold += TREE_CHANCE
-	if roll < threshold and _tree_textures.size() > 0:
-		var node := _create_tree(cell)
-		chunk_data["decorations"].append(node)
-		return
-
-	# Rocks (static, with collision).
-	threshold += ROCK_CHANCE
-	if roll < threshold and _rock_textures.size() > 0:
-		var tex: Texture2D = _rock_textures[_decoration_rng.randi() % _rock_textures.size()]
-		var node := _create_decoration(cell, tex, Vector2(40, 20))
-		chunk_data["decorations"].append(node)
-		return
-
-	# Breakable jars (interactable, has loot).
-	threshold += JAR_CHANCE
-	if roll < threshold and _jar_scene:
-		var node := _create_jar(cell)
-		chunk_data["decorations"].append(node)
-		return
-
-	# 2x2 bush (no collision, purely visual).
-	threshold += BUSH_CHANCE
-	if roll < threshold and _bush_texture:
-		var node := _create_plant(cell, _bush_texture)
-		chunk_data["decorations"].append(node)
-		return
-
-	# Small plants and flowers (no collision, ground scatter).
-	threshold += PLANT_CHANCE
-	if roll < threshold:
-		# Mix plants and flowers roughly 60/40.
-		var tex: Texture2D
-		if _decoration_rng.randf() < 0.6 and _plant_textures.size() > 0:
-			tex = _plant_textures[_decoration_rng.randi() % _plant_textures.size()]
-		elif _flower_textures.size() > 0:
-			tex = _flower_textures[_decoration_rng.randi() % _flower_textures.size()]
-		if tex:
-			var node := _create_plant(cell, tex)
-			chunk_data["decorations"].append(node)
-
-func _create_tree(cell: Vector2i) -> Node2D:
+func _spawn_decoration(cell: Vector2i, entry: DecorationEntry) -> Node2D:
+	if not entry.scene:
+		return null
 	var world_pos := Vector2(
 		cell.x * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE),
 		cell.y * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE)
 	)
-
-	var container := Node2D.new()
-	container.position = world_pos
-
-	# Pick one of the two hand-painted tree variants.
-	var tex: Texture2D = _tree_textures[_decoration_rng.randi() % _tree_textures.size()]
-	var sprite := Sprite2D.new()
-	sprite.texture = tex
-	# Textures are 512px tall. offset.y = -256 puts the bottom edge at y=0 (container origin).
-	sprite.offset.y = -256.0
-	container.add_child(sprite)
-
-	# Trunk base is near the sprite bottom (container y=0).
-	# Box spans y=-100 to y=0, covering the full lower trunk.
-	var body := StaticBody2D.new()
-	var shape := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = Vector2(70, 100)
-	shape.shape = rect
-	shape.position = Vector2(0, -50)  # centered in lower trunk (y=-100 to y=0)
-	body.add_child(shape)
-	container.add_child(body)
-
-	ysort_layer.add_child(container)
-	return container
-
-func _create_jar(cell: Vector2i) -> Node2D:
-	var world_pos := Vector2(
-		cell.x * TILE_SIZE + _decoration_rng.randf_range(4, TILE_SIZE - 4),
-		cell.y * TILE_SIZE + _decoration_rng.randf_range(4, TILE_SIZE - 4)
-	)
-
-	var jar := _jar_scene.instantiate()
-	jar.position = world_pos
-	ysort_layer.add_child(jar)
-	return jar
-
-func _create_plant(cell: Vector2i, tex: Texture2D) -> Node2D:
-	var world_pos := Vector2(
-		cell.x * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE),
-		cell.y * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE)
-	)
-
-	# Plants are pure visual - no collision, just a sprite on the ground.
-	var container := Node2D.new()
-	container.position = world_pos
-
-	var sprite := Sprite2D.new()
-	sprite.texture = tex
-	sprite.offset.y = -tex.get_height() / 2.0  # Origin at bottom.
-	container.add_child(sprite)
-
-	ysort_layer.add_child(container)
-	return container
-
-func _create_decoration(cell: Vector2i, tex: Texture2D, collision_size: Vector2) -> Node2D:
-	var world_pos := Vector2(
-		cell.x * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE),
-		cell.y * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE)
-	)
-
-	# Container node at the base position (for y-sort).
-	var container := Node2D.new()
-	container.position = world_pos
-
-	# Sprite draws upward from the base.
-	var sprite := Sprite2D.new()
-	sprite.texture = tex
-	sprite.offset.y = -tex.get_height() / 2.0  # Origin at bottom center.
-	container.add_child(sprite)
-
-	# Collision at the base.
-	var body := StaticBody2D.new()
-	var shape := CollisionShape2D.new()
-	var rect := RectangleShape2D.new()
-	rect.size = collision_size
-	shape.shape = rect
-	body.add_child(shape)
-	container.add_child(body)
-
-	ysort_layer.add_child(container)
-	return container
+	var node: Node2D = entry.scene.instantiate()
+	node.position = world_pos
+	ysort_layer.add_child(node)
+	return node
 
 # --- Water Collision ---
 
