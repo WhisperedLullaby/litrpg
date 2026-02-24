@@ -19,7 +19,7 @@ func _ready() -> void:
 	var xp_component: ExperienceComponent = player.get_node("ExperienceComponent")
 	xp_bar.setup(xp_component)
 
-	# Give the world generator references it needs.
+	# Give the world generator references it sdsdneeds.
 	world_gen.player = player
 	world_gen.ysort_layer = ysort_layer
 

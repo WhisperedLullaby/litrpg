@@ -1,41 +1,32 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=20 format=3 uid="uid://dssyqadaq8mry"]
 
-[ext_resource type="Script" path="res://scenes/player/player.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="3"]
-[ext_resource type="Script" path="res://scenes/weapons/basic_weapon.gd" id="4"]
+[ext_resource type="Script" uid="uid://brgcmdmhjc5v0" path="res://scenes/player/player.gd" id="1"]
+[ext_resource type="Script" uid="uid://bfn6qpasqhfbl" path="res://scripts/components/health_component.gd" id="2"]
+[ext_resource type="Script" uid="uid://r28ie5k2qe42" path="res://scripts/components/hurtbox_component.gd" id="3"]
+[ext_resource type="Script" uid="uid://dlvogtk0ltjnf" path="res://scenes/weapons/basic_weapon.gd" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/weapons/projectile.tscn" id="5"]
-[ext_resource type="Script" path="res://scripts/components/pickup_collector.gd" id="6"]
-[ext_resource type="Script" path="res://scenes/weapons/punch_weapon.gd" id="7"]
-[ext_resource type="PackedScene" path="res://scenes/weapons/punch.tscn" id="8"]
-[ext_resource type="Script" path="res://scripts/components/stats_component.gd" id="9"]
-[ext_resource type="Script" path="res://scripts/resources/stat_block.gd" id="10"]
-[ext_resource type="Script" path="res://scripts/components/experience_component.gd" id="11"]
-[ext_resource type="Script" path="res://scripts/components/status_effect_component.gd" id="12"]
-[ext_resource type="Script" path="res://scripts/components/inventory_component.gd" id="13"]
-[ext_resource type="Script" path="res://scenes/player/inventory_visual.gd" id="14"]
-
-[ext_resource type="Script" path="res://scenes/player/dash_skill.gd" id="15"]
+[ext_resource type="Script" uid="uid://dil2fp60p6vfm" path="res://scripts/components/pickup_collector.gd" id="6"]
+[ext_resource type="Script" uid="uid://bl8ygyks18ohi" path="res://scenes/weapons/punch_weapon.gd" id="7"]
+[ext_resource type="PackedScene" uid="uid://86yl8e74ekus" path="res://scenes/weapons/punch.tscn" id="8"]
+[ext_resource type="Script" uid="uid://ev1a4sf23xwc" path="res://scripts/components/stats_component.gd" id="9"]
+[ext_resource type="Script" uid="uid://562i0odggvoc" path="res://scripts/resources/stat_block.gd" id="10"]
+[ext_resource type="Script" uid="uid://cluj4dds2idgu" path="res://scripts/components/experience_component.gd" id="11"]
+[ext_resource type="Script" uid="uid://cfb1wb1ufwpxl" path="res://scripts/components/status_effect_component.gd" id="12"]
+[ext_resource type="Script" uid="uid://bjamg4epghwnc" path="res://scripts/components/inventory_component.gd" id="13"]
+[ext_resource type="Script" uid="uid://dp12f3qkql0q3" path="res://scenes/player/inventory_visual.gd" id="14"]
+[ext_resource type="Script" uid="uid://caeefnsnmar7d" path="res://scenes/player/dash_skill.gd" id="15"]
 
 [sub_resource type="Resource" id="player_base_stats"]
 script = ExtResource("10")
-agility = 1.0
-dexterity = 1.0
-strength = 1.0
-endurance = 1.0
-attunement = 1.0
-perception = 1.0
-luck = 1.0
-overclock = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(14, 10)
+size = Vector2(112, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
-size = Vector2(16, 20)
+size = Vector2(128, 160)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 16.0
+radius = 128.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1")
@@ -45,17 +36,14 @@ script = ExtResource("9")
 base_stats = SubResource("player_base_stats")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -8)
+position = Vector2(0, -64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 2)
+position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_1")
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("2")
-max_health = 100.0
-base_max_health = 100.0
-scales_with_endurance = true
 
 [node name="ExperienceComponent" type="Node" parent="."]
 script = ExtResource("11")
@@ -65,20 +53,17 @@ script = ExtResource("12")
 
 [node name="HurtboxComponent" type="Area2D" parent="."]
 script = ExtResource("3")
-invincibility_time = 0.5
-knockback_on_hit = 80.0
+knockback_on_hit = 640.0
 show_blood = true
 
 [node name="HurtboxShape" type="CollisionShape2D" parent="HurtboxComponent"]
-position = Vector2(0, -4)
+position = Vector2(0, -32)
 shape = SubResource("RectangleShape2D_2")
 
 [node name="BasicWeapon" type="Node2D" parent="."]
 script = ExtResource("4")
 projectile_scene = ExtResource("5")
-fire_rate = 0.8
-projectile_damage = 10.0
-projectile_speed = 200.0
+projectile_speed = 1600.0
 
 [node name="PunchWeapon" type="Node2D" parent="."]
 script = ExtResource("7")

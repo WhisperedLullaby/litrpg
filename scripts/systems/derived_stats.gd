@@ -12,8 +12,8 @@ class_name DerivedStats
 # --- Movement ---
 
 ## Calculates movement speed from Agility.
-## AGI 1 → 80, AGI 3 → 99, AGI 5 → 118, AGI 10 → 166
-static func movement_speed(agility: float, base_speed: float = 80.0) -> float:
+## AGI 1 → 384, AGI 3 → 476, AGI 5 → 568, AGI 10 → 798
+static func movement_speed(agility: float, base_speed: float = 384.0) -> float:
 	return base_speed * (1.0 + (agility - 1.0) * 0.12)
 
 # --- Combat ---
@@ -48,8 +48,8 @@ static func invincibility_duration(agility: float, base_duration: float = 0.5) -
 # --- Perception ---
 
 ## Calculates detection/awareness range from Perception.
-## PER 1 → 100px, PER 5 → 160px, PER 10 → 235px
-static func awareness_range(perception: float, base_range: float = 100.0) -> float:
+## PER 1 → 800px, PER 5 → 1280px, PER 10 → 1880px
+static func awareness_range(perception: float, base_range: float = 800.0) -> float:
 	return base_range * (1.0 + (perception - 1.0) * 0.15)
 
 # --- Luck ---

@@ -5,7 +5,7 @@ extends CharacterBody2D
 # formula the player uses. The system treats all entities equally.
 
 @export var xp_value: float = 15.0
-@export var base_movement_speed = 30
+@export var base_movement_speed = 240
 
 var cloud_scene: PackedScene = preload("res://scenes/pickups/xp_cloud.tscn")
 var core_scene: PackedScene = preload("res://scenes/pickups/core_pickup.tscn")
@@ -16,7 +16,7 @@ const ITEM_DROP_CHANCE := 0.05  # 5% chance to drop an equipment item.
 var player: Node2D = null
 var is_dying: bool = false
 var is_hit: bool = false
-var speed: float = 50.0
+var speed: float = 400.0
 var _facing: String = "front"
 
 # Bat loot table - built in _ready. Core drop is not guaranteed.
@@ -96,7 +96,7 @@ func _roll_loot() -> void:
 
 	for scene in scenes:
 		var drop := scene.instantiate()
-		drop.global_position = global_position + Vector2(randf_range(-6, 6), randf_range(-6, 6))
+		drop.global_position = global_position + Vector2(randf_range(-48, 48), randf_range(-48, 48))
 
 		# If this is a core, set quality based on cultivation.
 		if drop.has_method("setup_quality"):
@@ -109,7 +109,7 @@ func _roll_loot() -> void:
 	if randf() <= ITEM_DROP_CHANCE:
 		var pickup := item_pickup_scene.instantiate()
 		pickup.setup(ItemRegistry.random_item())
-		pickup.global_position = global_position + Vector2(randf_range(-6, 6), randf_range(-6, 6))
+		pickup.global_position = global_position + Vector2(randf_range(-48, 48), randf_range(-48, 48))
 		get_tree().current_scene.add_child(pickup)
 
 func _find_experience_component() -> ExperienceComponent:

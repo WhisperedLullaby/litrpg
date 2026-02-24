@@ -1,8 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://dp7feyd1tx1x3"]
+[gd_scene load_steps=7 format=3 uid="uid://dp7feyd1tx1x3"]
 
-[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1"]
-[ext_resource type="Script" uid="uid://d0d0yc8dpilmx" path="res://scenes/levels/enemy_spawner.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://cno6hvxvhow5g" path="res://scenes/enemies/bat.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dssyqadaq8mry" path="res://scenes/player/player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/health_bar.tscn" id="4"]
 [ext_resource type="Script" uid="uid://dw5mjkddooksg" path="res://scenes/levels/main.gd" id="5"]
 [ext_resource type="Script" uid="uid://054qu76d44ot" path="res://scenes/levels/world_generator.gd" id="6"]
@@ -25,8 +23,6 @@ position = Vector2(320, 180)
 script = ExtResource("9")
 
 [node name="EnemySpawner" type="Node2D" parent="."]
-script = ExtResource("2")
-enemy_scene = ExtResource("3")
 
 [node name="UI" type="CanvasLayer" parent="."]
 

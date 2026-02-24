@@ -30,7 +30,7 @@ var _recovery_elapsed: float = 0.0
 var _recovery_start_pos: Vector2 = Vector2.ZERO
 
 # Knockback effect applied on hit.
-var _knockback := StatusEffect.create_knockback(120.0, 0.25)
+var _knockback := StatusEffect.create_knockback(960.0, 0.25)
 
 # Reference to collision shape for enable/disable.
 @onready var _collision: CollisionShape2D = $CollisionShape2D
@@ -71,8 +71,8 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, 4.0, Color(0.85, 0.65, 0.5, 0.7 * _alpha))
-	draw_circle(Vector2.ZERO, 3.0, Color(0.92, 0.75, 0.6, 0.9 * _alpha))
+	draw_circle(Vector2.ZERO, 32.0, Color(0.85, 0.65, 0.5, 0.7 * _alpha))
+	draw_circle(Vector2.ZERO, 24.0, Color(0.92, 0.75, 0.6, 0.9 * _alpha))
 
 
 func strike(dir: Vector2) -> void:
@@ -81,7 +81,7 @@ func strike(dir: Vector2) -> void:
 
 	direction = dir
 	state = State.STRIKE
-	_strike_target = dir * 22.0
+	_strike_target = dir * 176.0
 	_alpha = 1.0
 
 	# Enable hitbox.
@@ -122,10 +122,10 @@ func set_recovery_duration(t: float) -> void:
 
 func update_facing(dir: String) -> void:
 	match dir:
-		"front": _pocket_target = Vector2(6, 8)
-		"back": _pocket_target = Vector2(6, -8)
-		"left": _pocket_target = Vector2(8, 2)
-		"right": _pocket_target = Vector2(-8, 2)
+		"front": _pocket_target = Vector2(48, 64)
+		"back": _pocket_target = Vector2(48, -64)
+		"left": _pocket_target = Vector2(64, 16)
+		"right": _pocket_target = Vector2(-64, 16)
 
 
 func _on_area_entered(area: Area2D) -> void:

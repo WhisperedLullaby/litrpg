@@ -8,10 +8,10 @@ extends Node
 enum State { READY, BURST, BOOST, SLOWDOWN }
 
 const LEVEL_DATA := [
-	{ "burst_force": 150.0, "boost_mod": 0.50, "boost_dur": 0.20, "slowdown_mod": -0.70, "slowdown_dur": 0.60 },
-	{ "burst_force": 190.0, "boost_mod": 0.60, "boost_dur": 0.25, "slowdown_mod": -0.55, "slowdown_dur": 0.55 },
-	{ "burst_force": 230.0, "boost_mod": 0.75, "boost_dur": 0.30, "slowdown_mod": -0.40, "slowdown_dur": 0.50 },
-	{ "burst_force": 280.0, "boost_mod": 1.00, "boost_dur": 0.35, "slowdown_mod": -0.25, "slowdown_dur": 0.45 },
+	{ "burst_force": 1200.0, "boost_mod": 0.50, "boost_dur": 0.20, "slowdown_mod": -0.70, "slowdown_dur": 0.60 },
+	{ "burst_force": 1520.0, "boost_mod": 0.60, "boost_dur": 0.25, "slowdown_mod": -0.55, "slowdown_dur": 0.55 },
+	{ "burst_force": 1840.0, "boost_mod": 0.75, "boost_dur": 0.30, "slowdown_mod": -0.40, "slowdown_dur": 0.50 },
+	{ "burst_force": 2240.0, "boost_mod": 1.00, "boost_dur": 0.35, "slowdown_mod": -0.25, "slowdown_dur": 0.45 },
 ]
 
 const BURST_DURATION := 0.10

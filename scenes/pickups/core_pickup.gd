@@ -28,7 +28,7 @@ func _ready() -> void:
 
 	# Spawn bounce animation.
 	var tween := create_tween()
-	tween.tween_property(self, "position:y", position.y - 8.0, 0.15).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position:y", position.y - 64.0, 0.15).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "position:y", position.y, 0.2).set_ease(Tween.EASE_IN)
 
 ## Set quality tier. Called by the loot system after instantiation.
@@ -56,11 +56,11 @@ static func quality_from_cultivation(total_xp_absorbed: float) -> Quality:
 func _draw() -> void:
 	var data: Dictionary = QUALITY_DATA[quality]
 	# Outer glow
-	draw_circle(Vector2.ZERO, 5.0, data["outer"])
+	draw_circle(Vector2.ZERO, 40.0, data["outer"])
 	# Inner core
-	draw_circle(Vector2.ZERO, 3.0, data["inner"])
+	draw_circle(Vector2.ZERO, 24.0, data["inner"])
 	# Bright center
-	draw_circle(Vector2.ZERO, 1.5, data["center"])
+	draw_circle(Vector2.ZERO, 12.0, data["center"])
 
 func collect(collector: Node) -> void:
 	# Try to add to collector's inventory.
@@ -87,6 +87,6 @@ func _find_inventory(entity: Node) -> InventoryComponent:
 func _bounce_away(collector: Node) -> void:
 	# Push core away from the collector so it doesn't re-trigger immediately.
 	var away: Vector2 = (global_position - collector.global_position).normalized()
-	var target_pos := global_position + away * 20.0
+	var target_pos := global_position + away * 160.0
 	var tween := create_tween()
 	tween.tween_property(self, "global_position", target_pos, 0.2).set_ease(Tween.EASE_OUT)
