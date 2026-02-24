@@ -42,6 +42,8 @@ const DUAL_GRID_MAP: Array[Vector2i] = [
 	Vector2i(2, 1),  # 15: 1111 all grass
 ]
 
+const _SPRITE_DECORATION_SCENE: PackedScene = preload("res://scenes/environment/sprite_decoration.tscn")
+
 var player: Node2D = null
 var ysort_layer: Node2D = null
 
@@ -260,14 +262,23 @@ func _try_spawn_decoration(cell: Vector2i, chunk_data: Dictionary) -> void:
 			return  # One decoration per cell.
 
 func _spawn_decoration(cell: Vector2i, entry: DecorationEntry) -> Node2D:
-	if not entry.scene:
-		return null
 	var world_pos := Vector2(
 		cell.x * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE),
 		cell.y * TILE_SIZE + _decoration_rng.randf_range(0, TILE_SIZE)
 	)
-	var node: Node2D = entry.scene.instantiate()
+	var node: Node2D
+	if not entry.textures.is_empty():
+		# Sprite-based decoration: one scene, many possible textures.
+		node = _SPRITE_DECORATION_SCENE.instantiate()
+		node.textures = entry.textures
+		node.sprite_offset = entry.sprite_offset
+	elif entry.scene:
+		# Scene-based decoration: trees, etc. handle their own setup.
+		node = entry.scene.instantiate()
+	else:
+		return null
 	node.position = world_pos
+	node.z_index = entry.z_index
 	ysort_layer.add_child(node)
 	return node
 

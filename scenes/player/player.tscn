@@ -29,6 +29,7 @@ size = Vector2(128, 160)
 radius = 128.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+y_sort_enabled = true
 script = ExtResource("1")
 
 [node name="StatsComponent" type="Node" parent="."]
