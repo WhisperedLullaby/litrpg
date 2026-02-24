@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WorldDecorationConfig" load_steps=7 format=3 uid="uid://bb8khcwa6p1to"]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/tree_1.tscn" id="Scene_1"]
+[ext_resource type="PackedScene" path="res://scenes/environment/tree_2.tscn" id="Scene_2"]
+[ext_resource type="Script" uid="uid://ckbi8ub70me4l" path="res://scripts/resources/world_decoration_config.gd" id="Script_config"]
+[ext_resource type="Script" uid="uid://b4ldtmjml7akf" path="res://scripts/resources/decoration_entry.gd" id="Script_entry"]
+
+[sub_resource type="Resource" id="Entry_1"]
+script = ExtResource("Script_entry")
+scene = ExtResource("Scene_1")
+
+[sub_resource type="Resource" id="Entry_2"]
+script = ExtResource("Script_entry")
+scene = ExtResource("Scene_2")
+
+[resource]
+script = ExtResource("Script_config")
+entries = Array[ExtResource("Script_entry")]([SubResource("Entry_1"), SubResource("Entry_2")])
