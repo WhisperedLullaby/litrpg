@@ -5,7 +5,7 @@ extends CharacterBody2D
 # using the same formulas that apply to every entity in the system.
 
 var facing_direction: String = "front"
-var speed: float = 80.0
+var speed: float = 384.0
 var speed_modifier: float = 1.0
 
 # Pre-built "wounded" effect - applied when below 50% HP.
@@ -48,7 +48,7 @@ func _physics_process(_delta: float) -> void:
 	velocity = input_direction.normalized() * speed * speed_modifier + status_effects.get_knockback_velocity()
 	move_and_slide()
 	_update_animation(input_direction)
-	#print("speed=%.1f  agi=%.2f  kb=%s" % [speed, stats.get_stat("agility"), status_effects.get_knockback_velocity()])
+	#print("speed=%.1f  agi=%.2f  kb=%s" % [speed * speed_modifier, stats.get_stat("agility"), status_effects.get_knockback_velocity()])
 
 func _recalculate_from_stats() -> void:
 	# Speed is derived from AGI through the system's universal formula.
@@ -84,35 +84,16 @@ func _setup_animations() -> void:
 	var frames := SpriteFrames.new()
 	frames.remove_animation("default")
 
-	var animations := [
-		["idle_front", "res://sprites/player/MainC_Idle_Front.PNG", 9],
-		["idle_back",  "res://sprites/player/MainC_Idle_Back.PNG",  9],
-		["idle_left",  "res://sprites/player/MainC_Idle_Left.PNG",  9],
-		["idle_right", "res://sprites/player/MainC_Idle_Right.PNG", 9],
-		["walk_front", "res://sprites/player/MainC_Walk_Front.PNG", 4],
-		["walk_back",  "res://sprites/player/MainC_Walk_Back.PNG",  4],
-		["walk_left",  "res://sprites/player/MainC_Walk_Left.PNG",  4],
-		["walk_right", "res://sprites/player/MainC_Walk_Right.PNG", 4],
-	]
+	# Pre-alpha placeholder — single static sprite for all animation states.
+	var tex: Texture2D = load("res://sprites/prealphs-charsprite.png")
 
-	for anim_data in animations:
-		var anim_name: String = anim_data[0]
-		var sheet_path: String = anim_data[1]
-		var frame_count: int = anim_data[2]
-
+	for anim_name in [
+		"idle_front", "idle_back", "idle_left", "idle_right",
+		"walk_front", "walk_back", "walk_left", "walk_right",
+	]:
 		frames.add_animation(anim_name)
-		var fps := 4.0 if anim_name.begins_with("idle") else 8.0
-		frames.set_animation_speed(anim_name, fps)
+		frames.set_animation_speed(anim_name, 1.0)
 		frames.set_animation_loop(anim_name, true)
-
-		var sheet_texture: Texture2D = load(sheet_path)
-		var frame_width := sheet_texture.get_width() / frame_count
-		var frame_height: int = sheet_texture.get_height()
-
-		for i in frame_count:
-			var atlas := AtlasTexture.new()
-			atlas.atlas = sheet_texture
-			atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height)
-			frames.add_frame(anim_name, atlas)
+		frames.add_frame(anim_name, tex)
 
 	animated_sprite.sprite_frames = frames

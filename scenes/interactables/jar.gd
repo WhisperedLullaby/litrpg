@@ -55,7 +55,7 @@ func _roll_loot() -> void:
 	var scenes := _loot_table.roll(1.0)
 	for scene in scenes:
 		var drop := scene.instantiate()
-		drop.global_position = global_position + Vector2(randf_range(-8, 8), randf_range(20, 30))
+		drop.global_position = global_position + Vector2(randf_range(-64, 64), randf_range(160, 240))
 		if drop.has_method("setup_quality"):
 			drop.setup_quality(drop.quality_from_cultivation(0.0))
 		get_tree().current_scene.add_child(drop)
@@ -64,5 +64,5 @@ func _roll_loot() -> void:
 	if randf() <= ITEM_DROP_CHANCE:
 		var pickup := item_pickup_scene.instantiate()
 		pickup.setup(ItemRegistry.random_item())
-		pickup.global_position = global_position + Vector2(randf_range(-8, 8), randf_range(20, 30))
+		pickup.global_position = global_position + Vector2(randf_range(-64, 64), randf_range(160, 240))
 		get_tree().current_scene.add_child(pickup)

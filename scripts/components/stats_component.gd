@@ -86,7 +86,7 @@ func get_modifiers_for_stat(stat_name: String) -> Array[StatModifier]:
 # --- Convenience: Derived Values ---
 # These call DerivedStats so other scripts don't have to import it.
 
-func get_movement_speed(base_speed: float = 80.0) -> float:
+func get_movement_speed(base_speed: float = 384.0) -> float:
 	return DerivedStats.movement_speed(get_stat("agility"), base_speed)
 
 func get_max_health(base_hp: float = 100.0) -> float:

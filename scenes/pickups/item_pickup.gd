@@ -16,7 +16,7 @@ func _ready() -> void:
 
 	# Spawn bounce.
 	var tween := create_tween()
-	tween.tween_property(self, "position:y", position.y - 8.0, 0.15).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position:y", position.y - 64.0, 0.15).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "position:y", position.y, 0.2).set_ease(Tween.EASE_IN)
 
 ## Set up the pickup with an InventoryItem. Call before adding to tree.
@@ -39,7 +39,7 @@ func collect(collector: Node) -> void:
 			# Inventory full - bounce away.
 			var away: Vector2 = (global_position - collector.global_position).normalized()
 			var bounce := create_tween()
-			bounce.tween_property(self, "global_position", global_position + away * 20.0, 0.2)
+			bounce.tween_property(self, "global_position", global_position + away * 160.0, 0.2)
 			return
 
 	# Collected - shrink and remove.

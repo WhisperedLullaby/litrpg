@@ -13,7 +13,7 @@ extends Area2D
 
 @export var total_xp: float = 15.0
 @export var decay_rate: float = 2.0       # XP lost per second passively
-@export var initial_radius: float = 30.0  # starting cloud size in pixels
+@export var initial_radius: float = 240.0  # starting cloud size in pixels
 
 var xp_remaining: float
 
@@ -72,11 +72,11 @@ func _draw() -> void:
 	var radius := initial_radius * ratio
 
 	# Outer haze - soft, transparent.
-	draw_circle(Vector2.ZERO, maxf(radius, 2.0), Color(0.6, 0.3, 0.9, 0.15 * ratio))
+	draw_circle(Vector2.ZERO, maxf(radius, 16.0), Color(0.6, 0.3, 0.9, 0.15 * ratio))
 	# Middle ring.
-	draw_circle(Vector2.ZERO, maxf(radius * 0.6, 1.5), Color(0.7, 0.4, 1.0, 0.25 * ratio))
+	draw_circle(Vector2.ZERO, maxf(radius * 0.6, 12.0), Color(0.7, 0.4, 1.0, 0.25 * ratio))
 	# Dense center.
-	draw_circle(Vector2.ZERO, maxf(radius * 0.3, 1.0), Color(0.8, 0.5, 1.0, 0.4 * ratio))
+	draw_circle(Vector2.ZERO, maxf(radius * 0.3, 8.0), Color(0.8, 0.5, 1.0, 0.4 * ratio))
 
 func _on_body_entered(body: Node2D) -> void:
 	# Any entity with an ExperienceComponent that can absorb.

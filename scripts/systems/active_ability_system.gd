@@ -24,7 +24,7 @@ func use_ability(ability_id: String, user: Node2D) -> bool:
 func _energy_blast(user: Node2D) -> bool:
 	# AoE damage around the user.
 	var damage := 15.0
-	var radius := 60.0
+	var radius := 480.0
 
 	# Visual: expanding ring.
 	var ring := Node2D.new()
@@ -88,7 +88,7 @@ func _shadow_dash(user: Node2D) -> bool:
 			"left": direction = Vector2.LEFT
 			"right": direction = Vector2.RIGHT
 
-	var dash := StatusEffect.create_knockback(250.0, 0.15)
+	var dash := StatusEffect.create_knockback(2000.0, 0.15)
 	dash.id = "shadow_dash"
 	status.apply_effect(dash, direction)
 
@@ -126,7 +126,7 @@ func _process(delta):
 func _draw():
 	var r := _max_radius * _t
 	var alpha := (1.0 - _t) * _color.a
-	draw_arc(Vector2.ZERO, r, 0, TAU, 32, Color(_color.r, _color.g, _color.b, alpha), 2.0)
+	draw_arc(Vector2.ZERO, r, 0, TAU, 32, Color(_color.r, _color.g, _color.b, alpha), 16.0)
 """
 		script.reload()
 		set_meta("_ring_script_cache", script)
@@ -151,7 +151,7 @@ func _process(delta):
 
 func _draw():
 	var alpha := (1.0 - _t) * _color.a
-	var r := 12.0 + _t * 8.0
+	var r := 96.0 + _t * 64.0
 	draw_circle(Vector2.ZERO, r, Color(_color.r, _color.g, _color.b, alpha))
 """
 		script.reload()

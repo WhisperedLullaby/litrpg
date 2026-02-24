@@ -4,9 +4,9 @@ extends Area2D
 # enemy it hits. It's an Area2D (not CharacterBody2D) because
 # we don't need physics collisions - just overlap detection.
 
-@export var speed: float = 200.0
+@export var speed: float = 1600.0
 @export var damage: float = 10.0
-@export var max_range: float = 300.0  # despawn after traveling this far
+@export var max_range: float = 2400.0  # despawn after traveling this far
 
 var direction := Vector2.RIGHT
 var distance_traveled := 0.0

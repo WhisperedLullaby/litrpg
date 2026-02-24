@@ -58,11 +58,11 @@ func _spawn_blood() -> void:
 	# Blood red, tiny droplets spraying outward.
 	mat.direction = Vector3(0, -1, 0)
 	mat.spread = 45.0
-	mat.initial_velocity_min = 20.0
-	mat.initial_velocity_max = 50.0
-	mat.gravity = Vector3(0, 60, 0)
-	mat.scale_min = 1.0
-	mat.scale_max = 2.0
+	mat.initial_velocity_min = 160.0
+	mat.initial_velocity_max = 400.0
+	mat.gravity = Vector3(0, 480, 0)
+	mat.scale_min = 8.0
+	mat.scale_max = 20.0
 	mat.color = Color(0.7, 0.05, 0.05, 0.9)
 
 	particles.process_material = mat
@@ -71,7 +71,7 @@ func _spawn_blood() -> void:
 	particles.one_shot = true
 	particles.explosiveness = 0.9
 	particles.emitting = true
-	particles.global_position = get_parent().global_position + Vector2(0, -6)
+	particles.global_position = get_parent().global_position + Vector2(0, -48)
 
 	# Add to scene tree (not as child of entity, so it persists after i-frames).
 	get_tree().current_scene.add_child(particles)

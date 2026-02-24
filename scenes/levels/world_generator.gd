@@ -8,7 +8,7 @@ extends Node2D
 # Chunks of 16x16 tiles load/unload around the player seamlessly.
 
 const CHUNK_SIZE := 16         # tiles per chunk side
-const TILE_SIZE := 32          # pixels per tile
+const TILE_SIZE := 256         # pixels per tile
 const CHUNK_PX := CHUNK_SIZE * TILE_SIZE  # 512px per chunk
 const LOAD_RADIUS := 3         # chunks loaded in each direction
 const UNLOAD_RADIUS := 4       # chunks freed beyond this distance
@@ -80,8 +80,7 @@ var _tile_set: TileSet = null
 var _water_bodies: Dictionary = {}  # chunk_coord → Array[StaticBody2D]
 
 # Decoration resources (preloaded).
-var _tree_sprite_frames: SpriteFrames = null
-var _tree_texture: Texture2D = null
+var _tree_textures: Array[Texture2D] = []
 var _rock_textures: Array[Texture2D] = []
 var _plant_textures: Array[Texture2D] = []
 var _flower_textures: Array[Texture2D] = []
@@ -120,7 +119,7 @@ func _setup_tileset() -> void:
 	_tile_set.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
 
 	var atlas := TileSetAtlasSource.new()
-	atlas.texture = preload("res://sprites/exported_tile_set.png")
+	atlas.texture = preload("res://resources/256textures/exported_tile_set.png")
 	atlas.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
 
 	# Register all 16 tiles in the 4x4 grid.
@@ -139,21 +138,11 @@ func _setup_display_layer() -> void:
 	add_child(_display_layer)
 
 func _preload_decorations() -> void:
-	# Animated tree spritesheet: 1024x64, 16 frames of 64x64.
-	_tree_texture = preload("res://sprites/newTiles/AnimatedTrees/AnimatedClassicalTrees/AnimatedTreeWarmColor.png")
-	_tree_sprite_frames = SpriteFrames.new()
-	_tree_sprite_frames.add_animation("sway")
-	_tree_sprite_frames.set_animation_speed("sway", 8.0)
-	_tree_sprite_frames.set_animation_loop("sway", true)
-	var frame_size := Vector2i(64, 64)
-	for i in 16:
-		var atlas_tex := AtlasTexture.new()
-		atlas_tex.atlas = _tree_texture
-		atlas_tex.region = Rect2(i * frame_size.x, 0, frame_size.x, frame_size.y)
-		_tree_sprite_frames.add_frame("sway", atlas_tex)
-	# Remove the auto-created "default" animation.
-	if _tree_sprite_frames.has_animation("default"):
-		_tree_sprite_frames.remove_animation("default")
+	# Hand-painted trees — two variants, chosen randomly per spawn.
+	_tree_textures = [
+		preload("res://resources/256textures/tree_1.png"),
+		preload("res://resources/256textures/tree_2.png"),
+	]
 
 	# Rocks - individual PNGs.
 	for i in range(1, 7):
@@ -326,7 +315,7 @@ func _try_spawn_decoration(cell: Vector2i, chunk_data: Dictionary) -> void:
 
 	# Trees (animated, with collision).
 	threshold += TREE_CHANCE
-	if roll < threshold and _tree_sprite_frames:
+	if roll < threshold and _tree_textures.size() > 0:
 		var node := _create_tree(cell)
 		chunk_data["decorations"].append(node)
 		return
@@ -375,21 +364,22 @@ func _create_tree(cell: Vector2i) -> Node2D:
 	var container := Node2D.new()
 	container.position = world_pos
 
-	# Animated sprite drawing upward from the base.
-	var anim_sprite := AnimatedSprite2D.new()
-	anim_sprite.sprite_frames = _tree_sprite_frames
-	anim_sprite.offset.y = -32.0  # 64px tall, origin at bottom center.
-	anim_sprite.play("sway")
-	# Start at a random frame so trees don't sway in sync.
-	anim_sprite.frame = _decoration_rng.randi() % 16
-	container.add_child(anim_sprite)
+	# Pick one of the two hand-painted tree variants.
+	var tex: Texture2D = _tree_textures[_decoration_rng.randi() % _tree_textures.size()]
+	var sprite := Sprite2D.new()
+	sprite.texture = tex
+	# Textures are 512px tall. offset.y = -256 puts the bottom edge at y=0 (container origin).
+	sprite.offset.y = -256.0
+	container.add_child(sprite)
 
-	# Collision at the trunk base.
+	# Trunk base is near the sprite bottom (container y=0).
+	# Box spans y=-100 to y=0, covering the full lower trunk.
 	var body := StaticBody2D.new()
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = Vector2(24, 12)
+	rect.size = Vector2(70, 100)
 	shape.shape = rect
+	shape.position = Vector2(0, -50)  # centered in lower trunk (y=-100 to y=0)
 	body.add_child(shape)
 	container.add_child(body)
 
