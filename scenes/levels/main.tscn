@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dp7feyd1tx1x3"]
+[gd_scene load_steps=8 format=3 uid="uid://dp7feyd1tx1x3"]
 
 [ext_resource type="PackedScene" uid="uid://dssyqadaq8mry" path="res://scenes/player/player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/health_bar.tscn" id="4"]
 [ext_resource type="Script" uid="uid://dw5mjkddooksg" path="res://scenes/levels/main.gd" id="5"]
 [ext_resource type="Script" uid="uid://054qu76d44ot" path="res://scenes/levels/world_generator.gd" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/core_pickup.tscn" id="7_ubwgw"]
 [ext_resource type="Script" uid="uid://cf5h4xmd60cel" path="res://scenes/ui/xp_bar.gd" id="8"]
 [ext_resource type="Script" uid="uid://b3fpvssx7s5p8" path="res://scenes/levels/camera.gd" id="9"]
 
@@ -34,3 +35,9 @@ offset_top = 26.0
 offset_right = 140.0
 offset_bottom = 36.0
 script = ExtResource("8")
+
+[node name="CorePickup" parent="." instance=ExtResource("7_ubwgw")]
+position = Vector2(771, 248)
+
+[node name="CorePickup2" parent="." instance=ExtResource("7_ubwgw")]
+position = Vector2(1163, 588)

@@ -15,16 +15,19 @@ var quality: Quality = Quality.COMMON
 
 # Quality → energy value and color mapping.
 const QUALITY_DATA := {
-	Quality.COMMON:    { "value": 1.0,  "inner": Color(0.5, 0.6, 0.7, 1.0),  "outer": Color(0.4, 0.5, 0.6, 0.4),  "center": Color(0.7, 0.75, 0.8, 1.0) },
-	Quality.UNCOMMON:  { "value": 3.0,  "inner": Color(0.3, 0.8, 0.4, 1.0),  "outer": Color(0.2, 0.6, 0.3, 0.4),  "center": Color(0.5, 1.0, 0.6, 1.0) },
-	Quality.RARE:      { "value": 8.0,  "inner": Color(0.4, 0.4, 0.9, 1.0),  "outer": Color(0.3, 0.3, 0.7, 0.4),  "center": Color(0.6, 0.6, 1.0, 1.0) },
-	Quality.EPIC:      { "value": 20.0, "inner": Color(0.8, 0.5, 0.2, 1.0),  "outer": Color(0.6, 0.4, 0.1, 0.4),  "center": Color(1.0, 0.7, 0.3, 1.0) },
-	Quality.LEGENDARY: { "value": 50.0, "inner": Color(0.9, 0.2, 0.2, 1.0),  "outer": Color(0.7, 0.1, 0.1, 0.4),  "center": Color(1.0, 0.4, 0.4, 1.0) },
+	Quality.COMMON:    { "value": 1.0,  "tint": Color(0.5, 0.6, 0.7, 1.0),  "glow": Color(0.4, 0.5, 0.6, 0.4) },
+	Quality.UNCOMMON:  { "value": 3.0,  "tint": Color(0.3, 0.8, 0.4, 1.0),  "glow": Color(0.2, 0.6, 0.3, 0.4) },
+	Quality.RARE:      { "value": 8.0,  "tint": Color(0.4, 0.4, 0.9, 1.0),  "glow": Color(0.3, 0.3, 0.7, 0.4) },
+	Quality.EPIC:      { "value": 20.0, "tint": Color(0.8, 0.5, 0.2, 1.0),  "glow": Color(0.6, 0.4, 0.1, 0.4) },
+	Quality.LEGENDARY: { "value": 50.0, "tint": Color(0.9, 0.2, 0.2, 1.0),  "glow": Color(0.7, 0.1, 0.1, 0.4) },
 }
+
+@onready var _sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
 	collision_layer = 16
 	collision_mask = 0
+	_apply_quality_visual()
 
 	# Spawn bounce animation.
 	var tween := create_tween()
@@ -35,8 +38,12 @@ func _ready() -> void:
 ## Updates energy_value and visuals to match.
 func setup_quality(q: Quality) -> void:
 	quality = q
+	energy_value = QUALITY_DATA[quality]["value"]
+	_apply_quality_visual()
+
+func _apply_quality_visual() -> void:
 	var data: Dictionary = QUALITY_DATA[quality]
-	energy_value = data["value"]
+	_sprite.modulate = data["tint"]
 	queue_redraw()
 
 ## Determine core quality from an entity's lifetime cultivation.
@@ -54,13 +61,8 @@ static func quality_from_cultivation(total_xp_absorbed: float) -> Quality:
 		return Quality.COMMON
 
 func _draw() -> void:
-	var data: Dictionary = QUALITY_DATA[quality]
-	# Outer glow
-	draw_circle(Vector2.ZERO, 40.0, data["outer"])
-	# Inner core
-	draw_circle(Vector2.ZERO, 24.0, data["inner"])
-	# Bright center
-	draw_circle(Vector2.ZERO, 12.0, data["center"])
+	# Ambient quality glow behind the sprite.
+	draw_circle(Vector2.ZERO, 17.0, QUALITY_DATA[quality]["glow"])
 
 func collect(collector: Node) -> void:
 	# Try to add to collector's inventory.

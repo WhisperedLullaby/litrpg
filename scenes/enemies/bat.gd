@@ -9,9 +9,6 @@ extends CharacterBody2D
 
 var cloud_scene: PackedScene = preload("res://scenes/pickups/xp_cloud.tscn")
 var core_scene: PackedScene = preload("res://scenes/pickups/core_pickup.tscn")
-var item_pickup_scene: PackedScene = preload("res://scenes/pickups/item_pickup.tscn")
-
-const ITEM_DROP_CHANCE := 0.05  # 5% chance to drop an equipment item.
 
 var player: Node2D = null
 var is_dying: bool = false
@@ -104,13 +101,6 @@ func _roll_loot() -> void:
 			drop.setup_quality(quality)
 
 		get_tree().current_scene.add_child(drop)
-
-	# Roll for equipment item drop.
-	if randf() <= ITEM_DROP_CHANCE:
-		var pickup := item_pickup_scene.instantiate()
-		pickup.setup(ItemRegistry.random_item())
-		pickup.global_position = global_position + Vector2(randf_range(-48, 48), randf_range(-48, 48))
-		get_tree().current_scene.add_child(pickup)
 
 func _find_experience_component() -> ExperienceComponent:
 	for child in get_children():

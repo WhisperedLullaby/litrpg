@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c7hvrajkx8o81"]
 
 [ext_resource type="Script" uid="uid://cxnqmf4pp5hwx" path="res://scenes/environment/tree.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bbblohfhg7cex" path="res://resources/256textures/tree_2.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bbblohfhg7cex" path="res://resources/256Textures/tree_2.png" id="2"]
 [ext_resource type="Shader" uid="uid://rmcjrkuurlj7" path="res://shaders/tree_wind.gdshader" id="3"]
 
 [sub_resource type="ShaderMaterial" id="1"]

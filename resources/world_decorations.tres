@@ -1,7 +1,12 @@
-[gd_resource type="Resource" script_class="WorldDecorationConfig" load_steps=7 format=3 uid="uid://bb8khcwa6p1to"]
+[gd_resource type="Resource" script_class="WorldDecorationConfig" load_steps=14 format=3 uid="uid://bb8khcwa6p1to"]
 
-[ext_resource type="PackedScene" path="res://scenes/environment/tree_1.tscn" id="Scene_1"]
-[ext_resource type="PackedScene" path="res://scenes/environment/tree_2.tscn" id="Scene_2"]
+[ext_resource type="Texture2D" uid="uid://cllade35crjoi" path="res://resources/256Textures/bush_1.png" id="Bush_1"]
+[ext_resource type="Texture2D" uid="uid://lg8hry0pv8kx" path="res://resources/256Textures/bush_2.png" id="Bush_2"]
+[ext_resource type="Texture2D" uid="uid://c13ow1dctrqb7" path="res://resources/256Textures/grass_sprite_1.png" id="Grass_1"]
+[ext_resource type="Texture2D" uid="uid://dy8vgvb305joc" path="res://resources/256Textures/grass_sprite_2.png" id="Grass_2"]
+[ext_resource type="Texture2D" uid="uid://bq5fkpagrayj8" path="res://resources/256Textures/grass_sprite_3.png" id="Grass_3"]
+[ext_resource type="PackedScene" uid="uid://dk5e70bd8q1x4" path="res://scenes/environment/tree_1.tscn" id="Scene_1"]
+[ext_resource type="PackedScene" uid="uid://c7hvrajkx8o81" path="res://scenes/environment/tree_2.tscn" id="Scene_2"]
 [ext_resource type="Script" uid="uid://ckbi8ub70me4l" path="res://scripts/resources/world_decoration_config.gd" id="Script_config"]
 [ext_resource type="Script" uid="uid://b4ldtmjml7akf" path="res://scripts/resources/decoration_entry.gd" id="Script_entry"]
 
@@ -13,6 +18,17 @@ scene = ExtResource("Scene_1")
 script = ExtResource("Script_entry")
 scene = ExtResource("Scene_2")
 
+[sub_resource type="Resource" id="Entry_Bush"]
+script = ExtResource("Script_entry")
+textures = Array[Texture2D]([ExtResource("Bush_1"), ExtResource("Bush_2")])
+chance = 0.572
+
+[sub_resource type="Resource" id="Entry_Grass"]
+script = ExtResource("Script_entry")
+textures = Array[Texture2D]([ExtResource("Grass_1"), ExtResource("Grass_2"), ExtResource("Grass_3")])
+chance = 0.516
+z_index = -1
+
 [resource]
 script = ExtResource("Script_config")
-entries = Array[ExtResource("Script_entry")]([SubResource("Entry_1"), SubResource("Entry_2")])
+entries = Array[ExtResource("Script_entry")]([SubResource("Entry_1"), SubResource("Entry_2"), SubResource("Entry_Bush"), SubResource("Entry_Grass")])
